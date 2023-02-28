@@ -15,12 +15,13 @@ namespace SportStoreNetCore.Controllers
             this.storeRepository = storeRepository;
         }
 
-        public IActionResult Index(int productPage = 1)
+        public IActionResult Index(string category, int productPage = 1)
         {
             var model = new ProductsListViewModel
             {
-                Products = storeRepository.Products.OrderBy(p => p.ProductID).Skip((productPage - 1) * pageSize).Take(pageSize),
-                PagingInfo = new PagingInfo { CurrentPage = productPage, ItemsPerPage = pageSize, TotalItems = storeRepository.Products.Count() }
+                Products = storeRepository.Products.Where(p => p.Category == category || category == null).OrderBy(p => p.ProductID).Skip((productPage - 1) * pageSize).Take(pageSize),
+                PagingInfo = new PagingInfo { CurrentPage = productPage, ItemsPerPage = pageSize, TotalItems = category == null ? storeRepository.Products.Count():storeRepository.Products.Where(e => e.Category == category).Count() },
+                CurrentCategory = category
             };
             return View(model);
         }
