@@ -29,6 +29,10 @@ namespace SportStoreNetCore
             services.AddDbContext<StoreDBContext>(db => db.UseNpgsql(Configuration["ConnectionString:SportStoreNET"]));
 
             services.AddScoped<IStoreRepository, EFStoreRepository>();
+            services.AddRazorPages();
+
+            services.AddDistributedMemoryCache();
+            services.AddSession();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -41,6 +45,8 @@ namespace SportStoreNetCore
             app.UseStatusCodePages();
             app.UseStaticFiles();
 
+            app.UseSession();
+
             app.UseRouting();
 
             app.UseEndpoints(endpoints =>
@@ -50,6 +56,7 @@ namespace SportStoreNetCore
                 endpoints.MapControllerRoute("Category", "{category}", new { Controller = "Home", action = "Index", productPage = 1 });
                 endpoints.MapControllerRoute("Pagination", "Product/Page{productPage}", new { Controller = "Home", action = "Index", productPage = 1 });
                 endpoints.MapDefaultControllerRoute();
+                endpoints.MapRazorPages();
             });
 
             SeedData.EnsurePopulated(app);
