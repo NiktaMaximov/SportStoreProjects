@@ -7,7 +7,7 @@ namespace SportStoreNetCore.Models
     {
         public List<CartLine> Lines { get; set; } = new List<CartLine>();
 
-        public void AddItem(Product product, int quantity)
+        public virtual void AddItem(Product product, int quantity)
         {
             CartLine line = Lines.Where(p => p.Product.ProductID == product.ProductID).FirstOrDefault();
             
@@ -21,7 +21,7 @@ namespace SportStoreNetCore.Models
             }
         }
 
-        public void RemoveItem(Product product)
+        public virtual void RemoveItem(Product product)
         {
             Lines.RemoveAll(l => l.Product.ProductID == product.ProductID);
         }
@@ -32,7 +32,7 @@ namespace SportStoreNetCore.Models
             return result;
         }
 
-        public void Clear()
+        public virtual void Clear()
         {
             Lines.Clear();
         }
